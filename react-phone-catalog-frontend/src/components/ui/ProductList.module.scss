@@ -1,0 +1,24 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.productList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(275px, 1fr));
+  gap: 24px;
+
+  @include tablet {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @include desktop {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.productListEmpty {
+  @include flex-center;
+  padding: 40px 16px;
+  text-align: center;
+  color: $gray-color;
+  border: 1px dashed $light-grey-color;
+  border-radius: 24px;
+}

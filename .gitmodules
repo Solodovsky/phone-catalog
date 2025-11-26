@@ -1,0 +1,3 @@
+[submodule "react-phone-catalog-frontend"]
+	path = react-phone-catalog-frontend
+	url = https://github.com/Solodovsky/phone-catalog.git
