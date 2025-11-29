@@ -10,7 +10,6 @@ const ShopByCategory = () => {
       link: '/phones',
       image: '/public/img/category-phones.png',
       imageAlt: 'Phones',
-      bgColor: '#6d6474',
     },
     {
       id: 'tablets',
@@ -18,7 +17,6 @@ const ShopByCategory = () => {
       link: '/tablets',
       image: '/public/img/category-tablets.png',
       imageAlt: 'Tablets',
-      bgColor: '#8D8D92',
     },
     {
       id: 'accessories',
@@ -26,9 +24,9 @@ const ShopByCategory = () => {
       link: '/accessories',
       image: '/public/img/category-accessories.png',
       imageAlt: 'Accessories',
-      bgColor: '#D53C51',
     },
   ];
+
   return (
     <section className={styles.shopByCategory}>
       <h2 className={styles.shopByCategoryTitle}>Shop by category</h2>
@@ -39,16 +37,12 @@ const ShopByCategory = () => {
             to={category.link}
             className={styles.shopByCategoryLink}
           >
-            <div
-              className={styles.shopByCategoryImageContainer}
-              style={{ backgroundColor: category.bgColor }}
-            >
-              <img
-                src={category.image}
-                alt={category.imageAlt}
-                className={styles.shopByCategoryImage}
-              />
-            </div>
+            <img
+              src={category.image}
+              alt={category.imageAlt}
+              className={styles.shopByCategoryImage}
+            />
+
             <div className={styles.shopByCategoryItemContent}>
               <h3 className={styles.shopByCategoryItemTitle}>
                 {category.title}

@@ -4,7 +4,7 @@ const PHONES = require("../data/phones");
 
 // GET /api/phones - Получить все телефоны
 router.get("/", (req, res) => {
-  const { model, sortBy } = req.query;
+  const { model, sortBy, hotPrices } = req.query;
 
   try {
     let result = PHONES;
@@ -23,6 +23,18 @@ router.get("/", (req, res) => {
           return 0;
         });
       }
+    }
+
+    if (hotPrices === "true") {
+      result = result.filter(
+        (phone) => phone.priceDiscount < phone.priceRegular
+      );
+
+      result.sort((a, b) => {
+        const discountA = a.priceRegular - b.priceDiscount;
+        const discountB = b.priceRegular - b.priceDiscount;
+        return discountB - discountA;
+      });
     }
 
     res.json({

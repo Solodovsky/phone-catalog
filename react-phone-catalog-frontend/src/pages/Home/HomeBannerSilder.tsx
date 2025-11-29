@@ -10,6 +10,7 @@ export type HomeBannerSlide = {
   id: number;
   imageUrl: string;
   imageAlt?: string;
+  mobileImageUrl?: string;
 };
 
 type HomeBannerSilderProps = {
@@ -56,11 +57,19 @@ const HomeBannerSilder: React.FC<HomeBannerSilderProps> = ({ slides }) => {
       <Slider {...settings} className={styles.slider}>
         {slides.map(slide => (
           <div key={slide.id} className={styles.sliderItem}>
-            <img
-              src={slide.imageUrl}
-              alt={slide.imageAlt}
-              className={styles.sliderImage}
-            />
+            <picture className={styles.sliderPicture}>
+              {slide.mobileImageUrl && (
+                <source
+                  media="(max-width: 639px)"
+                  srcSet={slide.mobileImageUrl}
+                />
+              )}
+              <img
+                src={slide.imageUrl}
+                alt={slide.imageAlt}
+                className={styles.sliderImage}
+              />
+            </picture>
           </div>
         ))}
       </Slider>

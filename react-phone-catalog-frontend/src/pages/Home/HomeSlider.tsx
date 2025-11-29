@@ -1,35 +1,18 @@
 import React, { useEffect, useState } from 'react';
 
 import Slider from 'react-slick';
-import styles from './NewModelsSlider.module.scss';
+import styles from './HomeSlider.module.scss';
 import { Phone, productsApi } from '../../api/productsApi';
 import { ProductCard } from '../../components/ui/ProductCard';
 import SliderLeftIcon from '../../components/icons/SliderLefticon';
 import SliderRightIcon from '../../components/icons/SliderRightIcon';
 
-const NewModelsSlider: React.FC = () => {
-  const [phones, setPhones] = useState<Phone[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+type Props = {
+  title: string;
+  phones: Phone[];
+};
 
-  useEffect(() => {
-    const getData = async () => {
-      setIsLoading(true);
-      try {
-        const data = await productsApi.fetchData<Phone>('phones', 'iphone-14');
-
-        if (!data) {
-          return;
-        }
-        setPhones(data);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    getData();
-  }, []);
-
+const HomeSlider: React.FC<Props> = ({ title, phones }) => {
   const PrevArrow: React.FC<{ onClick?: () => void }> = ({ onClick }) => (
     <button
       type="button"
@@ -66,16 +49,34 @@ const NewModelsSlider: React.FC = () => {
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 2.5,
-          slidesToScroll: 2,
+          slidesToShow: 3,
+          slidesToScroll: 3,
           infinite: false,
           dots: false,
+        },
+      },
+
+      {
+        breakpoint: 800,
+        settings: {
+          slidesToShow: 2.5,
+          slidesToScroll: 2,
+          initialSlide: 2,
         },
       },
       {
         breakpoint: 600,
         settings: {
-          slidesToShow: 2.5,
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2,
+        },
+      },
+
+      {
+        breakpoint: 500,
+        settings: {
+          slidesToShow: 2,
           slidesToScroll: 2,
           initialSlide: 2,
         },
@@ -90,12 +91,12 @@ const NewModelsSlider: React.FC = () => {
     ],
   };
   return (
-    <div className={styles.newModelsSlider}>
+    <div className={styles.Slider}>
       <div className={styles.sliderHeader}>
-        <h2 className={styles.sliderTittle}>Brand new models</h2>
+        <h2 className={styles.sliderTittle}>{title}</h2>
       </div>
       {phones.length > 0 && (
-        <Slider {...settings}>
+        <Slider {...settings} className={styles.slick}>
           {phones.map(phone => (
             <ProductCard key={phone.id} phone={phone} />
           ))}
@@ -105,4 +106,4 @@ const NewModelsSlider: React.FC = () => {
   );
 };
 
-export default NewModelsSlider;
+export default HomeSlider;

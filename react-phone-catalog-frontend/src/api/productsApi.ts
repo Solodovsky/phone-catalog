@@ -83,9 +83,10 @@ export const productsApi = {
     url: EndpointName,
     model = '',
     sortBy = '',
+    hotPrices = '',
   ): Promise<T[] | undefined> => {
     try {
-      const baseUrl = `${API_BASE_URL}/${url}?model=${model}&sortBy=${sortBy}`;
+      const baseUrl = `${API_BASE_URL}/${url}?model=${model}&sortBy=${sortBy}&hotPrices=${hotPrices}`;
       const response = await fetch(baseUrl);
       console.log(response);
       if (!response.ok) {

@@ -1,11 +1,7 @@
 @use '../../styles/variables' as *;
 @use '../../styles/mixins' as *;
 
-// .test div {
-//   margin-right: 16px;
-// }
-
-.newModelsSlider {
+.Slider {
   position: relative;
   padding: 32px 0;
 
@@ -18,6 +14,25 @@
 
   @include desktop {
     padding: 80px 0px;
+  }
+}
+
+.slick div {
+  display: flex;
+  gap: 16px;
+}
+
+.slick div::before {
+  display: none;
+}
+
+:global(.slick-slider) {
+  @include tablet {
+    margin-right: -24px;
+  }
+
+  @include mobile {
+    margin-right: -16px;
   }
 }
 
@@ -34,7 +49,7 @@
   }
 }
 
-.newModelsSliderTitle {
+.SliderTitle {
   font-size: $font-size-20;
   font-weight: $font-weight-bolder;
   color: $dark-grey-color;
@@ -72,7 +87,7 @@
   }
 
   @include desktop {
-    right: calc(32px + 32px + 16px);
+    right: calc(32px + 16px);
   }
 }
 
@@ -84,7 +99,7 @@
   }
 
   @include desktop {
-    right: 32px;
+    right: 0px;
   }
 }
 
