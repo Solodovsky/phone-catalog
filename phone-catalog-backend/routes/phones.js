@@ -4,13 +4,13 @@ const PHONES = require("../data/phones");
 
 // GET /api/phones - Получить все телефоны
 router.get("/", (req, res) => {
-  const { model, sortBy, hotPrices } = req.query;
+  const { model, sort, hotPrices, page, perPage } = req.query;
 
   try {
-    let result = PHONES;
+    let result = [...PHONES];
 
     if (model) {
-      result = PHONES.filter((phone) => phone.id.includes(model));
+      result = result.filter((phone) => phone.id.includes(model));
 
       if (model.includes("iphone-14")) {
         result.sort((a, b) => {
@@ -25,7 +25,7 @@ router.get("/", (req, res) => {
       }
     }
 
-    if (hotPrices === "true") {
+    if (hotPrices) {
       result = result.filter(
         (phone) => phone.priceDiscount < phone.priceRegular
       );
@@ -37,32 +37,52 @@ router.get("/", (req, res) => {
       });
     }
 
-    res.json({
-      data: result,
-    });
-  } catch (err) {
-    res.json({
-      message: "Error fetching phones",
-      error: err.message,
-    });
-  }
-});
-
-router.get("/:id", (req, res) => {
-  res.status(404).json({ message: "Phone not found" });
-  try {
-    const id = req.params.id;
-    const phone = PHONES.find((phon) => phon.id === id);
-
-    if (!phone) {
-      return res.status(404).json({ message: "Phone not found" });
+    if (sort) {
+      switch (sort) {
+        case "age":
+          result.sort((a, b) => {
+            if (a.isNew && !b.isNew) return -1;
+            if (!a.isNew && b.isNew) return 1;
+            return b.id.localeCompare(a.id);
+          });
+          break;
+        case "title":
+          result.sort((a, b) => a.name.localeCompare(b.name));
+          break;
+        case "price":
+          result.sort((a, b) => a.priceDiscount - b.priceDiscount);
+          break;
+        default:
+          break;
+      }
     }
 
-    res.json(phone);
-  } catch (error) {
+    const total = result.length;
+
+    const perPageNum = parseInt(perPage || "16", 10);
+    const pageNum = parseInt(page || "1", 10);
+
+    const validPerPage = !isNaN(perPageNum) && perPageNum > 0 ? perPageNum : 16;
+    const validPage = !isNaN(pageNum) && pageNum > 0 ? pageNum : 1;
+
+    const startIndex = (validPage - 1) * validPerPage;
+    const endIndex = startIndex + validPerPage;
+
+    const paginatedResult = result.slice(startIndex, endIndex);
+
+    res.json({
+      data: paginatedResult,
+      pagination: {
+        total,
+        page: validPage,
+        perPage: validPerPage,
+        totalPages: Math.ceil(total / validPerPage),
+      },
+    });
+  } catch (err) {
     res.status(500).json({
-      message: "Error fetching phone",
-      error: error.message,
+      message: "Error fetching phones",
+      error: err.message,
     });
   }
 });

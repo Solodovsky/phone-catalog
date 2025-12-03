@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 
 import Slider from 'react-slick';
 import styles from './HomeSlider.module.scss';
-import { Phone, productsApi } from '../../api/productsApi';
+import { Product, productsApi } from '../../api/productsApi';
 import { ProductCard } from '../../components/ui/ProductCard';
 import SliderLeftIcon from '../../components/icons/SliderLefticon';
 import SliderRightIcon from '../../components/icons/SliderRightIcon';
 
 type Props = {
   title: string;
-  phones: Phone[];
+  phones: Product[];
 };
 
 const HomeSlider: React.FC<Props> = ({ title, phones }) => {
@@ -98,7 +98,7 @@ const HomeSlider: React.FC<Props> = ({ title, phones }) => {
       {phones.length > 0 && (
         <Slider {...settings} className={styles.slick}>
           {phones.map(phone => (
-            <ProductCard key={phone.id} phone={phone} />
+            <ProductCard key={phone.id} product={phone} />
           ))}
         </Slider>
       )}

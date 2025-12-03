@@ -76,27 +76,54 @@ export type Accessory = {
   isNew?: boolean;
 };
 
+export type Product = Phone | Tablet | Accessory;
+
 export type EndpointName = 'products' | 'tablets' | 'phones' | 'accessories';
+export type QueryParams = {
+  [key: string]: string | number;
+};
+
+export type PaginationResponse<T> = {
+  data: T[];
+  pagination?: {
+    total: number;
+    page: number;
+    perPage: number;
+    totalPages: number;
+  };
+};
 
 export const productsApi = {
   fetchData: async <T>(
     url: EndpointName,
-    model = '',
-    sortBy = '',
-    hotPrices = '',
-  ): Promise<T[] | undefined> => {
+    queryParams: QueryParams = {},
+  ): Promise<PaginationResponse<T> | undefined> => {
     try {
-      const baseUrl = `${API_BASE_URL}/${url}?model=${model}&sortBy=${sortBy}&hotPrices=${hotPrices}`;
+      const params = new URLSearchParams();
+
+      if (queryParams.model) params.append('model', String(queryParams.model));
+      if (queryParams.sort) params.append('sort', String(queryParams.sort));
+      if (queryParams.hotPrices)
+        params.append('hotPrices', String(queryParams.hotPrices));
+      if (queryParams.page) params.append('page', String(queryParams.page));
+      if (queryParams.perPage)
+        params.append('perPage', String(queryParams.perPage));
+
+      const queryString = params.toString();
+      const baseUrl = `${API_BASE_URL}/${url}${
+        queryString ? '?' + queryString : ''
+      }`;
+
       const response = await fetch(baseUrl);
       console.log(response);
       if (!response.ok) {
-        throw new Error(':(');
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const { data } = await response.json();
 
-      return data;
+      return await response.json();
     } catch (error) {
-      console.error(error);
+      console.error('API ERROR:', error);
+      return undefined;
     }
   },
 };

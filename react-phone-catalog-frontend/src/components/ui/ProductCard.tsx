@@ -4,57 +4,59 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { addToCart, removeFromCart } from '../../store/slices/cartSlice';
 
 import styles from './ProductCard.module.scss';
-import { Phone } from '../../api/productsApi';
+import { Product } from '../../api/productsApi';
 import { toggleFavorite } from '../../store/slices/favoritesSlice';
 
 type Props = {
-  phone: Phone;
+  product: Product;
 };
 
-export const ProductCard: React.FC<Props> = ({ phone }) => {
+export const ProductCard: React.FC<Props> = ({ product }) => {
   const dispatch = useAppDispatch();
   const cartItems = useAppSelector(state => state.cart?.items || []);
   const favorites = useAppSelector((state: any) => state.favorites || []);
 
-  const path = `public/${phone.images[0]}`;
+  const path = `/${product.images[0]}`;
 
-  const isInCart = cartItems.some(item => item.id === phone.id);
-  const isInFavorites = favorites.includes(phone.id);
+  const isInCart = cartItems.some(item => item.id === product.id);
+  const isInFavorites = favorites.includes(product.id);
 
   const handleAddToCart = () => {
     if (isInCart) {
-      dispatch(removeFromCart(phone.id));
+      dispatch(removeFromCart(product.id));
     } else {
-      dispatch(addToCart(phone.id));
+      dispatch(addToCart(product.id));
     }
   };
 
   const handleToggleFavorite = () => {
-    dispatch(toggleFavorite(phone.id));
+    dispatch(toggleFavorite(product.id));
   };
 
   return (
     <div className={styles.productCard}>
       <div className={styles.imageContainer}>
-        <img src={path} alt={phone.name} className={styles.image} />
+        <img src={path} alt={product.name} className={styles.image} />
       </div>
       <div className={styles.info}>
-        <h3 className={styles.name}>{phone.name}</h3>
+        <h3 className={styles.name}>{product.name}</h3>
         <div className={styles.price}>
-          <span className={styles.priceRegular}>${phone.priceRegular}</span>
+          <span className={styles.priceRegular}>${product.priceRegular}</span>
         </div>
         <div className={styles.specs}>
           <div className={styles.spec}>
             <span className={styles.specLabel}>Screen:</span>
-            <span className={styles.specValue}>{phone.screen.slice(0, 9)}</span>
+            <span className={styles.specValue}>
+              {product.screen.slice(0, 9)}
+            </span>
           </div>
           <div className={styles.spec}>
             <span className={styles.specLabel}>Capacity:</span>
-            <span className={styles.specValue}>{phone.capacity}</span>
+            <span className={styles.specValue}>{product.capacity}</span>
           </div>
           <div className={styles.spec}>
             <span className={styles.specLabel}>RAM:</span>
-            <span className={styles.specValue}>{phone.ram}</span>
+            <span className={styles.specValue}>{product.ram}</span>
           </div>
         </div>
         <div className={styles.actions}>

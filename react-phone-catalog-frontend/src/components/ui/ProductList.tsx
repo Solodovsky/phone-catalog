@@ -7,11 +7,11 @@ type ProductListProps = {
   products?: Product[];
 };
 
-export const ProductList: React.FC<ProductListProps> = ({ products = [] }) => {
+const ProductList: React.FC<ProductListProps> = ({ products = [] }) => {
   if (!products.length) {
     return (
       <div className={styles.productListEmpty}>
-        <p>Нет доступных товаров</p>
+        <p>There are not products</p>
       </div>
     );
   }
@@ -19,8 +19,9 @@ export const ProductList: React.FC<ProductListProps> = ({ products = [] }) => {
   return (
     <div className={styles.productList}>
       {products.map(product => (
-        <ProductCard key={product.id} productId={String(product.id)} />
+        <ProductCard key={product.id} product={product} />
       ))}
     </div>
   );
 };
+export default ProductList;

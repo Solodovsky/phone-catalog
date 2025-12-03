@@ -3,23 +3,21 @@ import HomeBannerSilder, { HomeBannerSlide } from './HomeBannerSilder';
 import styles from './Home.module.scss';
 import HomeSlider from './HomeSlider';
 import ShopByCategory from './ShopByCategory';
-import productsApi, { Phone } from '../../api/productsApi';
+import productsApi, { Product } from '../../api/productsApi';
 
 const Home: React.FC = () => {
-  const [newModels, setNewModels] = useState<Phone[]>([]);
-  const [hotPrices, setHotPrices] = useState<Phone[]>([]);
+  const [newModels, setNewModels] = useState<Product[]>([]);
+  const [hotPrices, setHotPrices] = useState<Product[]>([]);
 
   useEffect(() => {
     const fetchSlidersData = async () => {
       const [newModelsData, hotPricesData] = await Promise.all([
-        productsApi.fetchData<Phone>('phones', 'iphone-14'),
-        productsApi.fetchData<Phone>('phones', '', '', 'true'),
+        productsApi.fetchData<Product>('phones', { model: 'iphone-14' }),
+        productsApi.fetchData<Product>('phones', { hotPrices: 'price' }),
       ]);
 
-      if (newModelsData) setNewModels(newModelsData);
-      if (hotPricesData) setHotPrices(hotPricesData);
-
-      console.log(hotPrices);
+      if (newModelsData) setNewModels(newModelsData.data);
+      if (hotPricesData) setHotPrices(hotPricesData.data);
     };
 
     fetchSlidersData();

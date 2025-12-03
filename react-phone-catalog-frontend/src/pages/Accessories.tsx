@@ -1,10 +1,13 @@
 import React from 'react';
+import ProductPage from '../components/ui/ProductPage';
 
 const Accessories: React.FC = () => {
   return (
-    <div className="page container">
-      <h2>Accessories</h2>
-    </div>
+    <ProductPage
+      category="accessories"
+      title="Accessories"
+      emptyMessage="There are not accessories yet"
+    />
   );
 };
 

@@ -1,10 +1,13 @@
 import React from 'react';
+import ProductPage from '../components/ui/ProductPage';
 
 const Tablets: React.FC = () => {
   return (
-    <div className="page container">
-      <h2>Tablets</h2>
-    </div>
+    <ProductPage
+      category="tablets"
+      title="Tablets"
+      emptyMessage="There are not tablets yet"
+    />
   );
 };
 
