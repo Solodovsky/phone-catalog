@@ -101,21 +101,16 @@ export const productsApi = {
     try {
       const params = new URLSearchParams();
 
-      if (queryParams.model) params.append('model', String(queryParams.model));
-      if (queryParams.sort) params.append('sort', String(queryParams.sort));
-      if (queryParams.hotPrices)
-        params.append('hotPrices', String(queryParams.hotPrices));
-      if (queryParams.page) params.append('page', String(queryParams.page));
-      if (queryParams.perPage)
-        params.append('perPage', String(queryParams.perPage));
+      let queryString = '';
 
-      const queryString = params.toString();
-      const baseUrl = `${API_BASE_URL}/${url}${
-        queryString ? '?' + queryString : ''
-      }`;
+      for (const key in queryParams) {
+        queryString += `${key}=${queryParams[key]}&`;
+      }
+
+      const baseUrl = `${API_BASE_URL}/${url}?${queryString}`;
 
       const response = await fetch(baseUrl);
-      console.log(response);
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }

@@ -6,18 +6,18 @@ import SliderRightIcon from './../icons/SliderRightIcon';
 
 type Props = {
   totalItems: number;
-  itemsPerPage: number;
+  items: number;
   currentPage: number;
   onPageChange: (page: number) => void;
 };
 
 const Pagination: React.FC<Props> = ({
   totalItems,
-  itemsPerPage,
+  items,
   currentPage,
   onPageChange,
 }) => {
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const totalPages = Math.ceil(totalItems / items);
 
   if (totalPages <= 1) {
     return null;
@@ -39,7 +39,8 @@ const Pagination: React.FC<Props> = ({
     <ReactPaginate
       nextLabel={nextArrow()}
       onPageChange={handlePageClick}
-      pageRangeDisplayed={5}
+      pageRangeDisplayed={4}
+      marginPagesDisplayed={0}
       pageCount={totalPages}
       previousLabel={prevArrow()}
       forcePage={currentPage - 1}

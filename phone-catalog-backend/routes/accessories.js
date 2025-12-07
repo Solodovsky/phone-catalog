@@ -4,7 +4,7 @@ const ACCESSORIES = require("../data/accessories");
 
 // GET /api/accessories - Получить все аксессуары
 router.get("/", (req, res) => {
-  const { sort, page, perPage } = req.query;
+  const { sort, page, items } = req.query;
 
   try {
     let result = [...ACCESSORIES];
@@ -31,36 +31,26 @@ router.get("/", (req, res) => {
 
     const total = result.length;
 
-    let paginatedResult = result;
+    const perPageNum = parseInt(items || "16", 10);
+    const pageNum = parseInt(page || "1", 10);
 
-    if (perPage && perPage !== "all") {
-      const perPageNum = parseInt(perPage, 10);
-      const pageNum = parseInt(page || "1", 10);
+    const validPerPage = !isNaN(perPageNum) && perPageNum > 0 ? perPageNum : 16;
+    const validPage = !isNaN(pageNum) && pageNum > 0 ? pageNum : 1;
 
-      if (!isNaN(perPageNum) && perPageNum > 0) {
-        const currentPage = !isNaN(pageNum) && pageNum > 0 ? pageNum : 1;
-        const startIndex = (currentPage - 1) * perPageNum;
-        const endIndex = startIndex + perPageNum;
+    const startIndex = (validPage - 1) * validPerPage;
+    const endIndex = startIndex + validPerPage;
 
-        paginatedResult = result.slice(startIndex, endIndex);
-      }
-    }
+    const paginatedResult = result.slice(startIndex, endIndex);
 
-    if (perPage && perPage !== "all") {
-      res.json({
-        data: paginatedResult,
-        pagination: {
-          total,
-          page: parseInt(page || "1", 10),
-          perPage: parseInt(perPage, 10),
-          totalPages: Math.ceil(total / parseInt(perPage, 10)),
-        },
-      });
-    } else {
-      res.json({
-        data: result,
-      });
-    }
+    res.json({
+      data: paginatedResult,
+      pagination: {
+        total,
+        page: validPage,
+        items: validPerPage,
+        totalPages: Math.ceil(total / validPerPage),
+      },
+    });
   } catch (error) {
     res.status(500).json({
       message: "Error fetching accessories",

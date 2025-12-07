@@ -4,7 +4,7 @@
 .productCard {
   display: flex;
   flex-direction: column;
-  align-items: center;
+
   justify-content: flex-start;
   background: $white-color;
   padding: 32px;
@@ -73,11 +73,11 @@
   font-size: 22px;
 }
 
-.priceRegular {
+.priceDiscount {
   color: $dark-grey-color;
 }
 
-.priceDiscount {
+.priceRegular {
   color: $gray-color;
   text-decoration: line-through;
 }

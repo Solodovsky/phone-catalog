@@ -4,7 +4,7 @@ const PHONES = require("../data/phones");
 
 // GET /api/phones - Получить все телефоны
 router.get("/", (req, res) => {
-  const { model, sort, hotPrices, page, perPage } = req.query;
+  const { model, sort, hotPrices, page, items } = req.query;
 
   try {
     let result = [...PHONES];
@@ -59,14 +59,11 @@ router.get("/", (req, res) => {
 
     const total = result.length;
 
-    const perPageNum = parseInt(perPage || "16", 10);
-    const pageNum = parseInt(page || "1", 10);
+    const perPageNum = Number(items || "16");
+    const pageNum = Number(page || "1");
 
-    const validPerPage = !isNaN(perPageNum) && perPageNum > 0 ? perPageNum : 16;
-    const validPage = !isNaN(pageNum) && pageNum > 0 ? pageNum : 1;
-
-    const startIndex = (validPage - 1) * validPerPage;
-    const endIndex = startIndex + validPerPage;
+    const startIndex = (pageNum - 1) * perPageNum;
+    const endIndex = startIndex + perPageNum;
 
     const paginatedResult = result.slice(startIndex, endIndex);
 
@@ -74,9 +71,9 @@ router.get("/", (req, res) => {
       data: paginatedResult,
       pagination: {
         total,
-        page: validPage,
-        perPage: validPerPage,
-        totalPages: Math.ceil(total / validPerPage),
+        page: pageNum,
+        items: perPageNum,
+        totalPages: Math.ceil(total / perPageNum),
       },
     });
   } catch (err) {

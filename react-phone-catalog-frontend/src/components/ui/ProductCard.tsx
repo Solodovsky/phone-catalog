@@ -41,7 +41,25 @@ export const ProductCard: React.FC<Props> = ({ product }) => {
       <div className={styles.info}>
         <h3 className={styles.name}>{product.name}</h3>
         <div className={styles.price}>
-          <span className={styles.priceRegular}>${product.priceRegular}</span>
+          {product.isNew ? (
+            <span className={styles.priceDiscount}>
+              ${product.priceDiscount || product.priceRegular}
+            </span>
+          ) : product.priceDiscount &&
+            product.priceDiscount !== product.priceRegular ? (
+            <>
+              <span className={styles.priceDiscount}>
+                ${product.priceDiscount}
+              </span>
+              <span className={styles.priceRegular}>
+                ${product.priceRegular}
+              </span>
+            </>
+          ) : (
+            <span className={styles.priceDiscount}>
+              ${product.priceRegular}
+            </span>
+          )}
         </div>
         <div className={styles.specs}>
           <div className={styles.spec}>

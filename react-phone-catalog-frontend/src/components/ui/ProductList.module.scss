@@ -4,7 +4,8 @@
 .productList {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(275px, 1fr));
-  gap: 24px;
+  row-gap: 40px;
+  column-gap: 16px;
 
   @include tablet {
     grid-template-columns: repeat(3, 1fr);

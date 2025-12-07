@@ -62,7 +62,7 @@ const Header: React.FC = () => {
 
   return (
     <header className={styles.header}>
-      <div className={`container ${styles.headerContent}`}>
+      <div className={`${styles.headerContainer} ${styles.headerContent}`}>
         <div className={styles.logo}>
           <NavLink to="/" className={styles.logoLink} aria-label="Home">
             <LogoIcon />

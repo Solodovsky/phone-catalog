@@ -10,17 +10,32 @@
   border-bottom: 1px solid $light-grey-color;
 }
 
+.headerContainer {
+  margin: 0 auto;
+  max-width: 1440px;
+  padding-left: 16px;
+
+  @include tablet {
+    padding-left: 16px;
+  }
+
+  @include desktop {
+    padding-left: 24px;
+  }
+}
+
 .headerContent {
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  max-width: 1440px;
 
-  gap: 16px;
+  gap: 32px;
   min-height: 48px;
 
   @include desktop {
     min-height: 64px;
-    gap: 24px;
+    gap: 64px;
   }
 }
 
@@ -53,7 +68,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    gap: 40px;
+    gap: 64px;
     height: 64px;
   }
 }

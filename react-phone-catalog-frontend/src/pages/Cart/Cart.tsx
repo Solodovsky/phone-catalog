@@ -6,6 +6,7 @@ import {
   clearCart,
 } from '../../store/slices/cartSlice';
 import styles from './Cart.module.scss';
+import Breadcrumb from '../../components/ui/Breadcrumb';
 
 const Cart: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -38,6 +39,7 @@ const Cart: React.FC = () => {
 
   return (
     <div className={styles.cart}>
+      <Breadcrumb />
       <h2 className={styles.title}>Корзина ({totalCount})</h2>
       <div className={styles.items}>
         {items.map(item => (

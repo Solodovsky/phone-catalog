@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import Breadcrumb from './Breadcrumb';
 import Pagination from './Pagination';
 import ProductList from './ProductList';
 import productsApi, { Product } from '../../api/productsApi';
+import styles from './ProductPage.module.scss';
 
 type Category = 'phones' | 'tablets' | 'accessories';
 
@@ -12,142 +14,141 @@ type Props = {
   emptyMessage: string;
 };
 
+const SORT_OPTIONS = [
+  { value: 'age', label: 'Newest' },
+  { value: 'title', label: 'Name' },
+  { value: 'price', label: 'Price' },
+];
+
+const ITEMS_OPTIONS = [4, 8, 16] as const;
+
 const ProductPage: React.FC<Props> = ({ category, title, emptyMessage }) => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [productsList, setProductsList] = useState<Product[]>([]);
-  const [totalProductsCount, setTotalProductCount] = useState<number>(0);
-
-  const sort = searchParams.get('sort') || '';
-  const pageParam = searchParams.get('page');
-  const perPageParam = searchParams.get('perPage');
-
-  const getPageNumber = (param: string | null): number => {
-    if (!param) return 1;
-    const parsed = parseInt(param, 10);
-    return isNaN(parsed) || parsed < 1 ? 1 : parsed;
-  };
-
-  const getPerPage = (param: string | null): number => {
-    if (!param) return 16;
-    const parsed = parseInt(param, 10);
-    return isNaN(parsed) || parsed < 1 ? 16 : parsed;
-  };
-
-  const activePageNumber = getPageNumber(pageParam);
-  const productsPerPage = getPerPage(perPageParam);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [page, setPage] = useState<number>(1);
+  const [items, setItems] = useState(16);
+  const [totalItems, setTotalItems] = useState<number>(0);
+  const [sort, setSort] = useState<string>('');
 
   useEffect(() => {
     const fetchProductsData = async () => {
       try {
-        const queryParams: Record<string, string | number> = {};
+        const queryParams: Record<string, string | number> = {
+          page,
+          items,
+        };
 
         if (sort) {
           queryParams.sort = sort;
         }
-
-        queryParams.perPage = productsPerPage;
-        queryParams.page = activePageNumber;
 
         const response = await productsApi.fetchData<Product>(
           category,
           queryParams,
         );
 
-        if (response) {
-          setProductsList(response.data);
+        if (!response) {
+          return;
+        }
 
-          if (response.pagination) {
-            setTotalProductCount(response.pagination.total);
-          }
+        setProducts(response.data);
+
+        if (response.pagination) {
+          setTotalItems(response.pagination.total);
         }
       } catch (error) {
-        console.log(':(');
+        console.log(error);
       }
     };
+
     fetchProductsData();
-  }, [category, activePageNumber, productsPerPage, sort]);
+  }, [page, category, items, sort]);
 
-  const updateSearchParams = (
-    newSort?: string,
-    newPage?: number,
-    newPerPage?: number,
-  ) => {
-    const params = new URLSearchParams();
+  const updateParams = (updates: Record<string, string | number | null>) => {
+    const params = new URLSearchParams(searchParams);
 
-    const finalSort = newSort !== undefined ? newSort : sort;
-    const finalPage = newPage !== undefined ? newPage : activePageNumber;
-    const finalPerPage =
-      newPerPage !== undefined ? newPerPage : productsPerPage;
-
-    if (finalSort) {
-      params.set('sort', finalSort);
-    }
-
-    if (finalPage !== 1) {
-      params.set('page', finalPage.toString());
-    }
-
-    if (newPerPage !== undefined || perPageParam) {
-      params.set('perPage', finalPerPage.toString());
+    for (const [key, value] of Object.entries(updates)) {
+      if (value === null || value === '') {
+        params.delete(key);
+      } else {
+        params.set(key, String(value));
+      }
     }
 
     setSearchParams(params, { replace: true });
   };
 
-  const handlePageChange = (newPageNumber: number) => {
-    updateSearchParams(undefined, newPageNumber);
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+    updateParams({ page: newPage });
   };
 
-  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newSort = e.target.value;
-    updateSearchParams(newSort, 1);
+  const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const newSort = event.target.value;
+    setSort(newSort);
+
+    updateParams({ page: page, sort: newSort || null });
   };
 
-  const handlePerPageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newPerPage = parseInt(e.target.value, 10);
-    updateSearchParams(undefined, 1, newPerPage);
+  const handleItemsChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const newItems = +event.target.value;
+    setItems(newItems);
+
+    updateParams({ page: page, items: newItems });
   };
 
   return (
     <div className="page container">
-      <h2>{title}</h2>
-      <span>{totalProductsCount}: models</span>
-      <div>
-        <select
-          name="Sort by"
-          id="sort-select"
-          value={sort}
-          onChange={handleSortChange}
-        >
-          <option value="age">Newest</option>
-          <option value="title">Phone Name</option>
-          <option value="price">Price</option>
-        </select>
+      <Breadcrumb />
+      <h2 className={styles.title}>{title}</h2>
+      <span className={styles.totalItem}>{totalItems} models</span>
+      <div className={styles.selectContainer}>
+        <div className={styles.selectItems}>
+          <span>Sorty by</span>
+          <select
+            name="Sort by"
+            id="sort-select"
+            className={styles.selectItem}
+            value={sort}
+            onChange={handleSortChange}
+          >
+            {SORT_OPTIONS.map(option => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </div>
 
-        <select
-          name="Items per page"
-          id="per-page-select"
-          value={productsPerPage.toString()}
-          onChange={handlePerPageChange}
-        >
-          <option value="4">4</option>
-          <option value="8">8</option>
-          <option value="16">16</option>
-        </select>
+        <div className={styles.selectItems}>
+          <span>Items on page</span>
+          <select
+            name="Items per page"
+            id="per-page-select"
+            className={styles.selectItem}
+            value={items.toString()}
+            onChange={handleItemsChange}
+          >
+            {ITEMS_OPTIONS.map((count, idx) => (
+              <option key={idx} value={count}>
+                {count}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
-      {productsList.length === 0 ? (
-        <div>{emptyMessage}</div>
+      {products.length === 0 ? (
+        <div className={styles.emptyMessage}>{emptyMessage}</div>
       ) : (
-        <ProductList products={productsList} />
+        <ProductList products={products} />
       )}
-      {totalProductsCount > productsPerPage && (
-        <Pagination
-          totalItems={totalProductsCount}
-          itemsPerPage={productsPerPage}
-          currentPage={activePageNumber}
-          onPageChange={handlePageChange}
-        />
-      )}
+
+      <Pagination
+        totalItems={totalItems}
+        items={items}
+        currentPage={page}
+        onPageChange={handlePageChange}
+      />
     </div>
   );
 };
