@@ -10,13 +10,58 @@ const routeLabels: Record<string, string> = {
   '/cart': 'Cart',
 };
 
+const formatSegment = (segment: string) =>
+  segment
+    .split('-')
+    .filter(Boolean)
+    .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(' ');
+
 const Breadcrumb: React.FC = () => {
   const location = useLocation();
   const pathname = location.pathname;
 
   if (pathname === '/') return null;
 
-  const currentLabel = routeLabels[pathname] || pathname.slice(1);
+  const segments = pathname.split('/').filter(Boolean);
+  let accUrl = '';
+  const crumbs = segments.map((segment, idx) => {
+    accUrl += `/${segment}`;
+    const isLast = idx === segments.length - 1;
+    const label =
+      idx === 0
+        ? routeLabels[`/${segment}`] || formatSegment(segment)
+        : formatSegment(segment);
+
+    return (
+      <React.Fragment key={accUrl}>
+        <span className={styles.separator}>
+          <svg
+            width="6"
+            height="10"
+            viewBox="0 0 6 10"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className={styles.separatorIcon}
+          >
+            <path
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M0.195262 0.195262C0.455612 -0.0650874 0.877722 -0.0650874 1.13807 0.195262L5.13807 4.19526C5.39842 4.45561 5.39842 4.87772 5.13807 5.13807L1.13807 9.13807C0.877722 9.39842 0.455612 9.39842 0.195262 9.13807C-0.0650874 8.87772 -0.0650874 8.45561 0.195262 8.19526L3.72386 4.66667L0.195262 1.13807C-0.0650874 0.877722 -0.0650874 0.455612 0.195262 0.195262Z"
+              fill="#B4BDC4"
+            />
+          </svg>
+        </span>
+        {isLast ? (
+          <span className={styles.currentPage}>{label}</span>
+        ) : (
+          <Link to={accUrl} className={styles.breadcrumbLink}>
+            {label}
+          </Link>
+        )}
+      </React.Fragment>
+    );
+  });
 
   return (
     <nav className={styles.breadcrumb} aria-label="Breadcrumb">
@@ -43,24 +88,7 @@ const Breadcrumb: React.FC = () => {
           />
         </svg>
       </Link>
-      <span className={styles.separator}>
-        <svg
-          width="6"
-          height="10"
-          viewBox="0 0 6 10"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className={styles.separatorIcon}
-        >
-          <path
-            fillRule="evenodd"
-            clipRule="evenodd"
-            d="M0.195262 0.195262C0.455612 -0.0650874 0.877722 -0.0650874 1.13807 0.195262L5.13807 4.19526C5.39842 4.45561 5.39842 4.87772 5.13807 5.13807L1.13807 9.13807C0.877722 9.39842 0.455612 9.39842 0.195262 9.13807C-0.0650874 8.87772 -0.0650874 8.45561 0.195262 8.19526L3.72386 4.66667L0.195262 1.13807C-0.0650874 0.877722 -0.0650874 0.455612 0.195262 0.195262Z"
-            fill="#B4BDC4"
-          />
-        </svg>
-      </span>
-      <span className={styles.currentPage}>{currentLabel}</span>
+      {crumbs}
     </nav>
   );
 };

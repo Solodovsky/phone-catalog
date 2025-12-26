@@ -1,33 +1,28 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { useAppSelector } from '../../hooks/redux';
-import { ProductCard } from '../../components/ui/ProductCard';
+import ProductList from '../../components/ui/ProductList';
 import styles from './Favorites.module.scss';
-import { Product } from '../../api/productsApi';
 import Breadcrumb from '../../components/ui/Breadcrumb';
 
 const Favorites: React.FC = () => {
-  const favoriteIds = useAppSelector(state => state.favorites);
-  const [favoriteProducts, setFavoriteProducts] = useState<Product[]>([]);
+  const favoriteProducts = useAppSelector(state => state.favorites);
 
   return (
     <section className={`page container ${styles.favoritesPage}`}>
       <div className={styles.header}>
         <Breadcrumb />
         <h2 className={styles.title}>Favourites</h2>
-        {favoriteIds.length === 0 ? (
+        {favoriteProducts.length === 0 ? (
           ''
         ) : (
           <span className={styles.count}>
-            {favoriteIds.length} {favoriteIds.length === 1 ? 'item' : 'items'}
+            {favoriteProducts.length}{' '}
+            {favoriteProducts.length === 1 ? 'item' : 'items'}
           </span>
         )}
       </div>
-      <div className={styles.grid}>
-        {favoriteProducts.map(phone => (
-          <ProductCard key={phone.id} product={phone} />
-        ))}
-      </div>
+      <ProductList products={favoriteProducts} />
     </section>
   );
 };

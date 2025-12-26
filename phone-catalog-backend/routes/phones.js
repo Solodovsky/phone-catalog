@@ -84,4 +84,23 @@ router.get("/", (req, res) => {
   }
 });
 
+// GET /api/phones/:id - Получить телефон по ID
+router.get("/:id", (req, res) => {
+  try {
+    const { id } = req.params;
+    const phone = PHONES.find((item) => item.id === id);
+
+    if (!phone) {
+      return res.status(404).json({ message: "Phone not found" });
+    }
+
+    res.json(phone);
+  } catch (err) {
+    res.status(500).json({
+      message: "Error fetching phone",
+      error: err.message,
+    });
+  }
+});
+
 module.exports = router;

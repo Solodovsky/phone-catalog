@@ -121,6 +121,25 @@ export const productsApi = {
       return undefined;
     }
   },
+
+  fetchDataId: async <T>(
+    url: EndpointName,
+    id: string,
+  ): Promise<T | undefined> => {
+    try {
+      const baseUrl = `${API_BASE_URL}/${url}/${id}`;
+      const response = await fetch(baseUrl);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('API ERROR:', error);
+      return undefined;
+    }
+  },
 };
 
 export default productsApi;

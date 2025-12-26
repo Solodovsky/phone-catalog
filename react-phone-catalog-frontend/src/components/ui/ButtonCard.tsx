@@ -2,7 +2,8 @@ import React from 'react';
 import styles from './ButtonCard.module.scss';
 
 type ButtonCardProps = {
-  onClick?: () => void;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  className?: string;
   disabled?: boolean;
   label?: string;
   isSelected?: boolean;
@@ -10,6 +11,7 @@ type ButtonCardProps = {
 
 export const ButtonCard: React.FC<ButtonCardProps> = ({
   onClick,
+  className = '',
   disabled = false,
   label = 'Add to cart',
   isSelected = false,
@@ -18,7 +20,7 @@ export const ButtonCard: React.FC<ButtonCardProps> = ({
     <button
       className={`${styles.btnCard} ${
         isSelected ? styles.btnCardSelected : ''
-      }`.trim()}
+      } ${className}`.trim()}
       onClick={onClick}
       disabled={disabled}
       type="button"

@@ -9,10 +9,10 @@ import SliderRightIcon from '../../components/icons/SliderRightIcon';
 
 type Props = {
   title: string;
-  phones: Product[];
+  products: Product[];
 };
 
-const HomeSlider: React.FC<Props> = ({ title, phones }) => {
+const HomeSlider: React.FC<Props> = ({ title, products }) => {
   const PrevArrow: React.FC<{ onClick?: () => void }> = ({ onClick }) => (
     <button
       type="button"
@@ -95,10 +95,10 @@ const HomeSlider: React.FC<Props> = ({ title, phones }) => {
       <div className={styles.sliderHeader}>
         <h2 className={styles.sliderTittle}>{title}</h2>
       </div>
-      {phones.length > 0 && (
+      {products.length > 0 && (
         <Slider {...settings} className={styles.slick}>
-          {phones.map(phone => (
-            <ProductCard key={phone.id} product={phone} />
+          {products.map(product => (
+            <ProductCard key={product.id} product={product} />
           ))}
         </Slider>
       )}

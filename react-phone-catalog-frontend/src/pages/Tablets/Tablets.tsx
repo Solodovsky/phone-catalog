@@ -1,5 +1,5 @@
 import React from 'react';
-import ProductPage from '../components/ui/ProductPage';
+import ProductPage from '../../components/ui/ProductPage';
 
 const Tablets: React.FC = () => {
   return (

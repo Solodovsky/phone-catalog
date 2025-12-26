@@ -6,6 +6,7 @@ import { addToCart, removeFromCart } from '../../store/slices/cartSlice';
 import styles from './ProductCard.module.scss';
 import { Product } from '../../api/productsApi';
 import { toggleFavorite } from '../../store/slices/favoritesSlice';
+import { Link } from 'react-router-dom';
 
 type Props = {
   product: Product;
@@ -17,27 +18,40 @@ export const ProductCard: React.FC<Props> = ({ product }) => {
   const favorites = useAppSelector((state: any) => state.favorites || []);
 
   const path = `/${product.images[0]}`;
+  const detailsPath = `/${product.category}/${product.id}`;
 
   const isInCart = cartItems.some(item => item.id === product.id);
-  const isInFavorites = favorites.includes(product.id);
+  const isInFavorites = favorites.some((fav: Product) => fav.id === product.id);
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
     if (isInCart) {
       dispatch(removeFromCart(product.id));
     } else {
-      dispatch(addToCart(product.id));
+      dispatch(
+        addToCart({
+          id: product.id,
+          name: product.name,
+          image: product.images[0],
+          price: product.priceDiscount || product.priceRegular,
+        }),
+      );
     }
   };
 
-  const handleToggleFavorite = () => {
-    dispatch(toggleFavorite(product.id));
+  const handleToggleFavorite = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    dispatch(toggleFavorite(product));
   };
 
   return (
-    <div className={styles.productCard}>
+    <Link to={detailsPath} className={styles.productCard}>
       <div className={styles.imageContainer}>
         <img src={path} alt={product.name} className={styles.image} />
       </div>
+
       <div className={styles.info}>
         <h3 className={styles.name}>{product.name}</h3>
         <div className={styles.price}>
@@ -102,7 +116,7 @@ export const ProductCard: React.FC<Props> = ({ product }) => {
           </button>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

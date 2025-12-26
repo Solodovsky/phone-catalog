@@ -21,12 +21,6 @@
   color: $gray-color;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(275px, 1fr));
-  gap: 24px;
-}
-
 .emptyState {
   @include flex-center;
   flex-direction: column;

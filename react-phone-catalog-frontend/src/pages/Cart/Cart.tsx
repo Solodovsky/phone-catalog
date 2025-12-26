@@ -7,10 +7,19 @@ import {
 } from '../../store/slices/cartSlice';
 import styles from './Cart.module.scss';
 import Breadcrumb from '../../components/ui/Breadcrumb';
+import { CloseIcon } from '../../components/icons';
+import PlusIcon from '../../components/icons/PlusIcon';
+import MinuseIcon from '../../components/icons/MinuseIcon';
+import ButtonCard from '../../components/ui/ButtonCard';
 
 const Cart: React.FC = () => {
   const dispatch = useAppDispatch();
   const { items, totalCount } = useAppSelector(state => state.cart);
+
+  const totalPrice = items.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0,
+  );
 
   const handleRemoveItem = (id: string) => {
     dispatch(removeFromCart(id));
@@ -31,54 +40,58 @@ const Cart: React.FC = () => {
   if (totalCount === 0) {
     return (
       <div className={styles.emptyCart}>
-        <h2>Корзина пуста</h2>
-        <p>Добавьте товары для оформления заказа</p>
+        <p>There are not products</p>
       </div>
     );
   }
 
   return (
-    <div className={styles.cart}>
+    <div className="container">
       <Breadcrumb />
-      <h2 className={styles.title}>Корзина ({totalCount})</h2>
-      <div className={styles.items}>
-        {items.map(item => (
-          <div key={item.id} className={styles.cartItem}>
-            <div className={styles.itemInfo}>
-              <span className={styles.itemName}>{item.id}</span>
-              <div className={styles.quantity}>
-                <button
-                  onClick={() =>
-                    handleQuantityChange(item.id, item.quantity - 1)
-                  }
-                  className={styles.quantityButton}
-                >
-                  -
+      <h2 className={styles.title}>Cart</h2>
+      <div className={styles.cart}>
+        <div className={styles.items}>
+          {items.map(item => (
+            <div key={item.id} className={styles.cartItem}>
+              <div className={styles.itemInfo}>
+                <button onClick={() => handleRemoveItem(item.id)}>
+                  <CloseIcon />
                 </button>
-                <span>{item.quantity}</span>
-                <button
-                  onClick={() =>
-                    handleQuantityChange(item.id, item.quantity + 1)
-                  }
-                  className={styles.quantityButton}
-                >
-                  +
-                </button>
+                <img
+                  src={`/${item.image}`}
+                  alt={item.name}
+                  className={styles.itemImage}
+                />
+                <p className={styles.itemName}>{item.name}</p>
+                <div className={styles.quantity}>
+                  <button
+                    onClick={() =>
+                      handleQuantityChange(item.id, item.quantity - 1)
+                    }
+                    className={styles.quantityButton}
+                  >
+                    <MinuseIcon />
+                  </button>
+                  <span>{item.quantity}</span>
+                  <button
+                    onClick={() =>
+                      handleQuantityChange(item.id, item.quantity + 1)
+                    }
+                    className={styles.quantityButton}
+                  >
+                    <PlusIcon />
+                  </button>
+                </div>
               </div>
+              <p className={styles.itemPrice}>${item.price}</p>
             </div>
-            <button
-              onClick={() => handleRemoveItem(item.id)}
-              className={styles.removeButton}
-            >
-              Удалить
-            </button>
-          </div>
-        ))}
-      </div>
-      <div className={styles.cartFooter}>
-        <button onClick={handleClearCart} className={styles.clearButton}>
-          Очистить корзину
-        </button>
+          ))}
+        </div>
+        <div className={styles.total}>
+          <h3 className={styles.totalPrice}>${totalPrice}</h3>
+          <p className={styles.totalText}>Total for {totalCount} items</p>
+          <ButtonCard label="Checkout" />
+        </div>
       </div>
     </div>
   );

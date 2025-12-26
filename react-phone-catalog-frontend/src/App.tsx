@@ -4,10 +4,11 @@ import { Provider } from 'react-redux';
 import { store } from './store/store';
 import Header from './components/header/Header';
 import Home from './pages/Home/Home';
-import Phones from './pages/Phones';
-import Tablets from './pages/Tablets';
-import Accessories from './pages/Accessories';
+import Phones from './pages/Phones/Phones';
+import Tablets from './pages/Tablets/Tablets';
+import Accessories from './pages/Accessories/Accessories';
 import Favorites from './pages/Favourites/Favorites';
+import Details from './pages/Details/Details';
 import Cart from './pages/Cart/Cart';
 import './App.scss';
 import Footer from './components/footer/Footer';
@@ -25,6 +26,7 @@ const App: React.FC = () => {
               <Route path="/tablets" element={<Tablets />} />
               <Route path="/accessories" element={<Accessories />} />
               <Route path="/favorites" element={<Favorites />} />
+              <Route path="/:category/:productId" element={<Details />} />
               <Route path="/cart" element={<Cart />} />
             </Routes>
           </main>

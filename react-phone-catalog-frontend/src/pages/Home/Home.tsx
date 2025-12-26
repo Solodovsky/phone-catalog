@@ -49,9 +49,9 @@ const Home: React.FC = () => {
     <div className="page container">
       <h2 className={styles.homeTitle}>Welcome to Nice Gadgets store!</h2>
       <HomeBannerSilder slides={slides} />
-      <HomeSlider phones={newModels} title="Brand new models" />
+      <HomeSlider products={newModels} title="Brand new models" />
       <ShopByCategory />
-      <HomeSlider phones={hotPrices.slice(0, 18)} title="Hot prices" />
+      <HomeSlider products={hotPrices.slice(0, 18)} title="Hot prices" />
     </div>
   );
 };

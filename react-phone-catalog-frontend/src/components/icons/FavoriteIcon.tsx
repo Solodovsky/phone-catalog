@@ -5,12 +5,14 @@ type IconProps = {
   width?: string | number;
   height?: string | number;
   isActive?: boolean;
+  onClick?: (event: React.MouseEvent<SVGSVGElement>) => void;
 };
 
 export const FavoriteIcon: React.FC<IconProps> = ({
   className = '',
   width = 40,
   height = 40,
+  onClick,
   isActive = false,
 }) => {
   const heartFill = isActive ? '#EB5757' : '#313237';
@@ -26,6 +28,7 @@ export const FavoriteIcon: React.FC<IconProps> = ({
   return (
     <svg
       className={className}
+      onClick={onClick}
       width={width}
       height={height}
       viewBox="0 0 40 40"
