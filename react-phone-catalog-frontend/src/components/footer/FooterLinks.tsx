@@ -12,7 +12,7 @@ export const FooterLinks: React.FC = () => {
       >
         GitHub
       </a>
-      <a className={styles.link} href="mailto:toxa2h@bk.ru">
+      <a className={styles.link} href="#">
         Contacts
       </a>
       <a className={styles.link} href="#">
@@ -23,4 +23,3 @@ export const FooterLinks: React.FC = () => {
 };
 
 export default FooterLinks;
-

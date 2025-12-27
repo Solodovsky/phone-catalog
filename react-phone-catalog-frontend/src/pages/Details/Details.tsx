@@ -73,6 +73,10 @@ const Details = () => {
     dispatch(toggleFavorite(product));
   };
 
+  const handleScrollTo = () => {
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       if (!category || !productId) return;
@@ -98,7 +102,10 @@ const Details = () => {
       }
     };
     fetchData();
+    handleScrollTo();
   }, [category, productId]);
+
+  
 
   const handleCapacityClick = (capacity: string) => {
     setSelectCapacity(capacity);

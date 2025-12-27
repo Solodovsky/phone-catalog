@@ -39,4 +39,3 @@ export const MenuIcon: React.FC<IconProps> = ({
 };
 
 export default MenuIcon;
-

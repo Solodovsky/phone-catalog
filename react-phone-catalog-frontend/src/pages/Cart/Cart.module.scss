@@ -1,11 +1,31 @@
 @use '../../styles/variables' as *;
 @use '../../styles/mixins' as *;
 
+.cartPage {
+  padding: 32px 0 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
 .cart {
   display: flex;
-  gap: 16px;
-  align-items: flex-start;
-  margin-bottom: 80px;
+  flex-direction: column;
+  gap: 32px;
+
+  @include tablet {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  @include desktop {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    align-items: flex-start;
+    margin-bottom: 80px;
+  }
 }
 
 .title {
@@ -17,14 +37,22 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  width: 70%;
+  width: 100%;
 }
 
 .emptyCart {
   @include flex-center;
-  padding: 40px 16px;
+  flex-direction: column;
+  min-height: 400px;
+  padding: 80px 16px;
   text-align: center;
+  width: 100%;
+}
+
+.emptyCartText {
   color: $gray-color;
+    font-size: $font-size-16;
+    margin: 0;
 }
 
 .itemImage {
@@ -41,6 +69,12 @@
   padding: 24px;
   gap: 50px;
   border: 1px solid $light-grey-color;
+
+
+  @include mobile {
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 .itemInfo {
@@ -48,22 +82,44 @@
   align-items: center;
   gap: 24px;
   flex: 1;
+
+  @include mobile {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
 }
 
 .itemName {
   font-weight: 600;
   font-size: 14px;
+  color: $dark-grey-color;
   flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  
+  @include tablet {
+    flex: 1;
+  }
+
+  @include desktop {
+    white-space: nowrap;
+    flex: 1;
+  }
 }
 
 .itemPrice {
   font-size: 22px;
   font-weight: 800;
   flex-shrink: 0;
+}
+
+.quantityAndPrice {
+  display: flex;
+  gap: 53px;
+
+  @include mobile {
+    justify-content: space-between;
+    width: 100%;
+    gap: 103px;
+  }
 }
 
 .quantity {
@@ -80,7 +136,11 @@
   flex-direction: column;
   border: 1px solid $light-grey-color;
   padding: 24px;
-  width: 30%;
+  width: 100%;
+
+  @include desktop {
+    width: 50%;
+  }
 }
 
 .totalPrice {

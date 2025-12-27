@@ -23,4 +23,3 @@ export const LogoIcon: React.FC<IconProps> = ({
 };
 
 export default LogoIcon;
-

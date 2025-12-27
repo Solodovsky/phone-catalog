@@ -10,7 +10,7 @@ type ProductListProps = {
 const ProductList: React.FC<ProductListProps> = ({ products = [] }) => {
   if (!products.length) {
     return (
-      <div className={styles.productListEmpty}>
+      <div className={styles.productEmpty}>
         <p>There are not products</p>
       </div>
     );

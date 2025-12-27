@@ -13,10 +13,27 @@ type CartState = {
   totalCount: number;
 };
 
-const initialState: CartState = {
-  items: [],
-  totalCount: 0,
+const loadCartFromStorage = (): CartState => {
+  try {
+    const serializedState = localStorage.getItem('cart');
+    if (serializedState === null) {
+      return { items: [], totalCount: 0 };
+    }
+    return JSON.parse(serializedState);
+  } catch (error) {
+    return { items: [], totalCount: 0 };
+  }
 };
+
+const saveCartToStorage = (state: CartState) => {
+  try {
+    localStorage.setItem('cart', JSON.stringify(state));
+  } catch (error) {
+    console.log('Failed to save to Storage', error);
+  }
+};
+
+const initialState: CartState = loadCartFromStorage();
 
 const cartSlice = createSlice({
   name: 'cart',
@@ -32,6 +49,7 @@ const cartSlice = createSlice({
         state.items.push({ ...action.payload, quantity: 1 });
       }
       state.totalCount += 1;
+      saveCartToStorage(state);
     },
     removeFromCart: (state, action: PayloadAction<string>) => {
       const item = state.items.find(item => item.id === action.payload);
@@ -39,6 +57,7 @@ const cartSlice = createSlice({
         state.totalCount -= item.quantity;
         state.items = state.items.filter(item => item.id !== action.payload);
       }
+      saveCartToStorage(state);
     },
     updateQuantity: (
       state,
@@ -50,10 +69,12 @@ const cartSlice = createSlice({
         item.quantity = action.payload.quantity;
         state.totalCount += diff;
       }
+      saveCartToStorage(state);
     },
     clearCart: state => {
       state.items = [];
       state.totalCount = 0;
+      saveCartToStorage(state);
     },
   },
 });

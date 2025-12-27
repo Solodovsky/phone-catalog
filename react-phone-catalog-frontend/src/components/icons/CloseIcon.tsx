@@ -33,4 +33,3 @@ export const CloseIcon: React.FC<IconProps> = ({
 };
 
 export default CloseIcon;
-

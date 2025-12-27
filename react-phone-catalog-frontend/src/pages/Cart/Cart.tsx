@@ -39,14 +39,18 @@ const Cart: React.FC = () => {
 
   if (totalCount === 0) {
     return (
-      <div className={styles.emptyCart}>
-        <p>There are not products</p>
-      </div>
+      <section className={`page container ${styles.cartPage}`}>
+        <Breadcrumb />
+        <h2 className={styles.title}>Cart</h2>
+        <div className={styles.emptyCart}>
+          <p className={styles.emptyCartText}>There are not products</p>
+        </div>
+      </section>
     );
   }
 
   return (
-    <div className="container">
+    <section className={`page container ${styles.cartPage}`}>
       <Breadcrumb />
       <h2 className={styles.title}>Cart</h2>
       <div className={styles.cart}>
@@ -63,8 +67,9 @@ const Cart: React.FC = () => {
                   className={styles.itemImage}
                 />
                 <p className={styles.itemName}>{item.name}</p>
-                <div className={styles.quantity}>
-                  <button
+                <div className={styles.quantityAndPrice}>
+                 <div className={styles.quantity}>
+                 <button
                     onClick={() =>
                       handleQuantityChange(item.id, item.quantity - 1)
                     }
@@ -81,9 +86,10 @@ const Cart: React.FC = () => {
                   >
                     <PlusIcon />
                   </button>
+                 </div>
+                  <p className={styles.itemPrice}>${item.price}</p>
                 </div>
               </div>
-              <p className={styles.itemPrice}>${item.price}</p>
             </div>
           ))}
         </div>
@@ -93,7 +99,7 @@ const Cart: React.FC = () => {
           <ButtonCard label="Checkout" />
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
